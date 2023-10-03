@@ -2,9 +2,12 @@ import { createWorker } from "tesseract.js";
 
 const recognize = async (image) => {
   const worker = await createWorker();
-  const { data } = await worker.recognize(image);
+  await worker.setParameters({ tessedit_char_whitelist: "0123456789" });
+  const {
+    data: { text },
+  } = await worker.recognize(image);
   await worker.terminate();
-  return data.text.replace(/\D+/g, "");
+  return text;
 };
 
 (async () => {
